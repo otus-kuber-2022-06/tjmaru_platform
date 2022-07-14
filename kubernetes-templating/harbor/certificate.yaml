@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: harbor-letsencrypt-prod
+spec:
+  acme:
+    email: tjma@list.ru
+    server: https://acme-v02.api.letsencrypt.org/directory
+    #    preferredChain: "ISRG Root X1"
+    privateKeySecretRef:
+      name: harbor.tjma.ru-private-key
+    solvers:
+      - http01:
+          ingress:
+            class: nginx

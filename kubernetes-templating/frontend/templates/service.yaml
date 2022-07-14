@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+  labels:
+    app: frontend
+spec:
+  type: {{ .Values.svc.type }}
+  selector:
+    app: frontend
+  ports:
+    - name: http
+      port: {{ .Values.svc.ports.port }}
+      targetPort: {{ .Values.svc.ports.targetPort }}
+      {{- if (eq "NodePort" .Values.svc.type) }}
+      nodePort: {{ .Values.svc.NodePort }}
+      {{- end }}

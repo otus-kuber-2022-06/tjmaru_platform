@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-web
+  labels:
+    app: canary-web
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 0
+  replicas: 1
+  template:
+    metadata:
+      name: canary-web
+      labels:
+        app: canary-web
+    spec:
+      initContainers:
+        - name: html
+          image: busybox:1.32.0
+          command: [ 'sh', '-c', 'wget -O- https://tinyurl.com/otus-k8s-intro | sh' ]
+          volumeMounts:
+            - name: app
+              mountPath: /app
+      containers: # Описание контейнеров внутри Pod
+        - name: web-server                      # Название контейнера
+          image: tjma/webserver:alpine-0.1    # Образ из которого создается контейнер
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+          readinessProbe:
+            httpGet:
+              port: 8000
+              path: /index.html
+          volumeMounts:
+            - name: app
+              mountPath: /app
+      volumes:
+        - name: app
+          emptyDir: { }
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: canary-web

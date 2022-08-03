@@ -1,0 +1,27 @@
+expose:
+  type: ingress
+  tls:
+    enabled: true
+    certSource: secret
+    auto:
+      commonName: ""
+    secret:
+      secretName: "harbor.51.250.7.242.nip.io"
+      notarySecretName: ""
+  ingress:
+    hosts:
+#      core: harbor.tjma.ru
+      core: harbor.51.250.7.242.nip.io
+    controller: default
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      cert-manager.io/cluster-issuer: "harbor-letsencrypt-prod"
+      cert-manager.io/acme-challenge-type: "http01"
+
+externalURL: https://harbor.51.250.7.242.nip.io
+internalTLS:
+  enabled: false
+
+notary:
+  enabled: false

@@ -1,0 +1,16 @@
+tolerations:
+- key: node-role
+  operator: Equal
+  value: infra
+  effect: NoSchedule
+
+nodeSelector:
+  yandex.cloud/node-group-id: catb99ap04bhbcudal3g
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
